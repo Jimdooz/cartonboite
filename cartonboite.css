@@ -1,0 +1,635 @@
+/*
+
+x : tailles dispo
+7 : directions possible, a, t, b, l, r, x, y
+5 : taille dispo
+
+7 * x * 5 -> classe à écrire, méthode classique
+
+--------------
+
+définir : Tailles écrans dispo [4 * 2] [min, max]
+7 * x * 2 + 8
+
+pour x = 19
+méthode de base : 665 classes
+ma méthode : 274 classes
+
+https://www.kizu.ru/conditions-for-css-variables/
+
+x : -5
+
+max(-5, -1) --> -1
+min(0, max(-5, -1)) --> -1 : Negatif
+
+x : 5
+max(5, -1) --> 5
+min(0, max(5, -1)) --> 0 : Positif
+
+---> Test2
+
+min(-5, 0) --> -5
+min(-5, 0) / -5 --> 1 : Negatif
+
+x : 5
+min(5, 0) --> 0
+min(5, 0) / 5 --> 0 : Positif
+
+//Permet d'avoir la valeur absolue en CSS
+var(--x) + (min(var(--x), 0) / var(--x) * -2 * var(--x))
+calc( ( var(--x) + (min(var(--x), 0) / var(--x) * -2 * var(--x)) ) * 1px)
+
+BIM BAM BOUM
+
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@100..900&display=swap');
+
+:root{
+    /* padding */
+
+    --p-min-vwp: calc(640 / 16); --p-max-vwp: calc(1280 / 16);
+    --m-min-vwp: calc(640 / 16); --m-max-vwp: calc(1280 / 16);
+    --fontsize-min-vwp: calc(640 / 16); --fontsize-max-vwp: calc(1280 / 16);
+    --elevation-min-vwp: calc(640 / 16); --elevation-max-vwp: calc(1280 / 16);
+    --weight-min-vwp: calc(640); --weight-max-vwp: calc(1280);
+
+    --size-0 : 0;
+    --size-1 : 0.25;
+    --size-2 : 0.5;
+    --size-3 : 0.75;
+    --size-4 : 1;
+    --size-5 : 1.25;
+    --size-6 : 1.5;
+    --size-8 : 2;
+    --size-10 : 2.5;
+    --size-12 : 3;
+    --size-16 : 4;
+    --size-20 : 5;
+    --size-24 : 6;
+    --size-32 : 8;
+    --size-40 : 10;
+    --size-48 : 12;
+    --size-56 : 14;
+    --size-64 : 16;
+
+    --text-xs: 0.75;
+    --text-sm: 0.875;
+    --text-base: 1;
+    --text-lg: 1.125;
+    --text-xl: 1.25;
+    --text-2xl: 1.5;
+    --text-3xl: 1.875;
+    --text-4xl: 2.25;
+    --text-5xl: 3;
+    --text-6xl: 4;
+
+    --sm-screen : calc(640 / 16);
+    --md-screen : calc(768 / 16);
+    --lg-screen : calc(1024 / 16);
+    --xl-screen : calc(1280 / 16);
+
+    --day-bg-color-r: 244; --day-bg-color-g: 242; --day-bg-color-b: 247;
+    --day-fg1-color-r: 255; --day-fg1-color-g: 255; --day-fg1-color-b: 255;
+    --day-fg2-color-r: 249; --day-fg2-color-g: 249; --day-fg2-color-b: 249;
+    --day-primary-color-r: 39; --day-primary-color-g: 36; --day-primary-color-b: 44;
+    --day-secondary-color-r: 81; --day-secondary-color-g: 81; --day-secondary-color-b: 86;
+
+    --night-bg-color-r: 24; --night-bg-color-g: 23; --night-bg-color-b: 25;
+    --night-fg1-color-r: 40; --night-fg1-color-g: 40; --night-fg1-color-b: 40;
+    --night-fg2-color-r: 65; --night-fg2-color-g: 58; --night-fg2-color-b: 58;
+    --night-primary-color-r: 244; --night-primary-color-g: 244; --night-primary-color-b: 244;
+    --night-secondary-color-r: 163; --night-secondary-color-g: 163; --night-secondary-color-b: 165;
+
+    --bg-color-r: var(--day-bg-color-r); --bg-color-g: var(--day-bg-color-g); --bg-color-b: var(--day-bg-color-b);
+    --fg1-color-r: var(--day-fg1-color-r); --fg1-color-g: var(--day-fg1-color-g); --fg1-color-b: var(--day-fg1-color-b);
+    --fg2-color-r: var(--day-fg2-color-r); --fg2-color-g: var(--day-fg2-color-g); --fg2-color-b: var(--day-fg2-color-b);
+    --primary-color-r: var(--day-primary-color-r); --primary-color-g: var(--day-primary-color-g); --primary-color-b: var(--day-primary-color-b);
+    --secondary-color-r: var(--day-secondary-color-r); --secondary-color-g: var(--day-secondary-color-g); --secondary-color-b: var(--day-secondary-color-b);
+
+    --dark-color-r: 24; --dark-color-g: 23; --dark-color-b: 25;
+    --darkL-color-r: 39; --darkL-color-g: 36; --darkL-color-b: 44;
+    --darkVL-color-r: 61; --darkVL-color-g: 58; --darkVL-color-b: 65;
+    --clear-color-r: 249; --clear-color-g: 249; --clear-color-b: 249;
+    --clearL-color-r: 220; --clearL-color-g: 220; --clearL-color-b: 220;
+    --clearVL-color-r: 244; --clearVL-color-g: 242; --clearVL-color-b: 247;
+
+    --palette1-r: 255; --palette1-g: 190; --palette1-b: 11;
+    --palette2-r: 251; --palette2-g: 86; --palette2-b: 7;
+    --palette3-r: 255; --palette3-g: 0; --palette3-b: 110;
+    --palette4-r: 131; --palette4-g: 56; --palette4-b: 236;
+    --palette5-r: 58; --palette5-g: 134; --palette5-b: 255;
+
+    --color-r: var(--primary-color-r);
+    --color-g: var(--primary-color-g);
+    --color-b: var(--primary-color-b);
+    --color-o: 1;
+}
+
+.NIGHT {
+    --bg-color-r: var(--night-bg-color-r); --bg-color-g: var(--night-bg-color-g); --bg-color-b: var(--night-bg-color-b);
+    --fg1-color-r: var(--night-fg1-color-r); --fg1-color-g: var(--night-fg1-color-g); --fg1-color-b: var(--night-fg1-color-b);
+    --fg2-color-r: var(--night-fg2-color-r); --fg2-color-g: var(--night-fg2-color-g); --fg2-color-b: var(--night-fg2-color-b);
+    --primary-color-r: var(--night-primary-color-r); --primary-color-g: var(--night-primary-color-g); --primary-color-b: var(--night-primary-color-b);
+    --secondary-color-r: var(--night-secondary-color-r); --secondary-color-g: var(--night-secondary-color-g); --secondary-color-b: var(--night-secondary-color-b);
+}
+
+.DAY {
+    --bg-color-r: var(--day-bg-color-r); --bg-color-g: var(--day-bg-color-g); --bg-color-b: var(--day-bg-color-b);
+    --fg1-color-r: var(--day-fg1-color-r); --fg1-color-g: var(--day-fg1-color-g); --fg1-color-b: var(--day-fg1-color-b);
+    --fg2-color-r: var(--day-fg2-color-r); --fg2-color-g: var(--day-fg2-color-g); --fg2-color-b: var(--day-fg2-color-b);
+    --primary-color-r: var(--day-primary-color-r); --primary-color-g: var(--day-primary-color-g); --primary-color-b: var(--day-primary-color-b);
+    --secondary-color-r: var(--day-secondary-color-r); --secondary-color-g: var(--day-secondary-color-g); --secondary-color-b: var(--day-secondary-color-b);
+}
+
+*, ::before, ::after{
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+html {
+    overflow: hidden;
+    height: 100%;
+    font-family: 'Epilogue', sans-serif;
+}
+
+p {
+  --value-test: calc(attr(data-before) + 560);
+}
+
+* {
+    --r-percent : calc(var(--bg-r) / 255);
+    --g-percent : calc(var(--bg-g) / 255);
+    --b-percent : calc(var(--bg-b) / 255);
+    --cmax : max(var(--r-percent), var(--g-percent), var(--b-percent));
+    --cmin : min(var(--r-percent), var(--g-percent), var(--b-percent));
+    --delta: calc(var(--cmax) - var(--cmin));
+    --if-rmax: min( calc( (var(--cmax) - var(--r-percent)) * 100000000 ), 1); /* 0 si max sinon 1 */
+    --if-gmax: min( calc( (var(--cmax) - var(--g-percent)) * 100000000 ), 2); /* 0 si max sinon 2 */
+    --if-bmax: min( calc( (var(--cmax) - var(--b-percent)) * 100000000 ), 3); /* 0 si max sinon 3 */
+    --num : calc((var(--g-percent) - var(--b-percent)) / var(--delta));
+    --divisor: 6;
+    --modulo: ((var(--divisor) - var(--num)) * ((var(--num) / var(--divisor))));
+    --h: calc((
+        (( var(--modulo) ) * ((var(--if-rmax) - 1) / -1))
+        +
+        ((var(--b-percent) - var(--r-percent)) / var(--delta) + 2) * ((var(--if-gmax) - 2) / -2) * (var(--if-rmax) / 1)
+        +
+        ((var(--r-percent) - var(--g-percent)) / var(--delta) + 4) * ((var(--if-bmax) - 3) / -3) * (var(--if-rmax) / 1) * (var(--if-gmax) / 2)
+    ) * 60 );
+
+    --ltemp : calc( (var(--cmax) + var(--cmin)) / 2 );
+    --valAbsTmp : calc(2 * var(--ltemp));
+    --valAbs : calc( ( var(--valAbsTmp) + (min(var(--valAbsTmp), 0) / var(--valAbsTmp) * -2 * var(--valAbsTmp)) ) - 1);
+    --l: calc(var(--ltemp) * 100);
+    --s : calc( var(--delta) / (1 - var(--valAbs)) * 100 );
+    
+    background-color: hsl(calc(var(--h,0) * 1deg), calc(var(--s) * 1%), calc(var(--l) * 1%), 1);
+
+    padding-top: var(--pt, var(--py, var(--p, 0)));
+    padding-bottom: var(--pb, var(--py, var(--p, 0)));
+    padding-left: var(--pl, var(--px, var(--p, 0)));
+    padding-right: var(--pr, var(--px, var(--p, 0)));
+
+    margin-top: var(--mt, var(--my, var(--m, 0)));
+    margin-bottom: var(--mb, var(--my, var(--m, 0)));
+    margin-left: var(--ml, var(--mx, var(--m, 0)));
+    margin-right: var(--mr, var(--mx, var(--m, 0)));
+
+    font-size: var(--fontsize);
+    font-weight: var(--weight);
+
+    box-shadow: var(--shadow);
+    /* background-color: var(--bg); */
+    color: var(--color);
+
+    --p-slope: calc( (var(--p-max) - var(--p-min)) / (var(--p-max-vwp) - var(--p-min-vwp)) );
+    --p-calculator : calc( (-1 * var(--p-direction) * ( (var(--p-max-vwp) * ( -1 + var(--p-direction) ) / -2 ) + (var(--p-min-vwp) * ( 1 + var(--p-direction) ) / 2 ) ) * var(--p-slope)) + var(--p-min));
+    --p: clamp(calc(var(--p-min) * 1rem), calc( var(--p-calculator) * 1rem + var(--p-slope) * 100vmin * var(--p-direction) ), calc(var(--p-max) * 1rem));
+    --p-direction: 1; --pt-direction: 1; --pb-direction: 1; --pl-direction: 1; --pr-direction: 1; --px-direction: 1; --py-direction: 1;
+    --pt: initial; --pb: initial; --pl: initial; --pr: initial; --px: initial; --py: initial;
+    --p-min: 0; --p-max: 0;
+    --pt-min: 0; --pt-max: 0;
+    --pb-min: 0; --pb-max: 0;
+    --pl-min: 0; --pl-max: 0;
+    --pr-min: 0; --pr-max: 0;
+    --px-min: 0; --px-max: 0;
+    --py-min: 0; --py-max: 0;
+
+    --m-slope: calc( (var(--m-max) - var(--m-min)) / (var(--m-max-vwp) - var(--m-min-vwp)) );
+    --m-calculator : calc( (-1 * var(--m-direction) * ( (var(--m-max-vwp) * ( -1 + var(--m-direction) ) / -2 ) + (var(--m-min-vwp) * ( 1 + var(--m-direction) ) / 2 ) ) * var(--m-slope)) + var(--m-min));
+    --m: clamp(calc(var(--m-min) * 1rem), calc( var(--m-calculator) * 1rem + var(--m-slope) * 100vmin * var(--m-direction) ), calc(var(--m-max) * 1rem));
+    --m-direction: 1; --mt-direction: 1; --mb-direction: 1; --ml-direction: 1; --mr-direction: 1; --mx-direction: 1; --my-direction: 1;
+    --mt: initial; --mb: initial; --ml: initial; --mr: initial; --mx: initial; --my: initial;
+    --m-min: 0; --m-max: 0;
+    --mt-min: 0; --mt-max: 0;
+    --mb-min: 0; --mb-max: 0;
+    --ml-min: 0; --ml-max: 0;
+    --mr-min: 0; --mr-max: 0;
+    --mx-min: 0; --mx-max: 0;
+    --my-min: 0; --my-max: 0;
+    
+    --fontsize-slope: calc( (var(--fontsize-max) - var(--fontsize-min)) / (var(--fontsize-max-vwp) - var(--fontsize-min-vwp)) );
+    --fontsize-calculator : calc( (-1 * var(--fontsize-direction) * ( (var(--fontsize-max-vwp) * ( -1 + var(--fontsize-direction) ) / -2 ) + (var(--fontsize-min-vwp) * ( 1 + var(--fontsize-direction) ) / 2 ) ) * var(--fontsize-slope)) + var(--fontsize-min));
+    --fontsize: clamp(calc(var(--fontsize-min) * 1rem), calc( var(--fontsize-calculator) * 1rem + var(--fontsize-slope) * 100vmin * var(--fontsize-direction) ), calc(var(--fontsize-max) * 1rem));
+    --fontsize-direction: 1; --fontsize-min: var(--text-base); --fontsize-max: var(--text-base);
+    
+    --weight-slope: calc( (var(--weight-max) - var(--weight-min)) / (var(--weight-max-vwp) - var(--weight-min-vwp)) );
+    --weight-calculator : calc( (-1 * var(--weight-direction) * ( (var(--weight-max-vwp) * ( -1 + var(--weight-direction) ) / -2 ) + (var(--weight-min-vwp) * ( 1 + var(--weight-direction) ) / 2 ) ) * var(--weight-slope)) + var(--weight-min));
+    --weight: clamp(var(--weight-min), calc( var(--weight-calculator) + var(--weight-slope) * var(--vmin) * var(--weight-direction) ), var(--weight-max));
+    --weight-direction: 1; --weight-min: 400; --weight-max: 400;
+
+    --elevation-slope: calc( (var(--elevation-max) - var(--elevation-min)) / (var(--elevation-max-vwp) - var(--elevation-min-vwp)) );
+    --elevation-calculator : calc( (-1 * var(--elevation-direction) * ( (var(--elevation-max-vwp) * ( -1 + var(--elevation-direction) ) / -2 ) + (var(--elevation-min-vwp) * ( 1 + var(--elevation-direction) ) / 2 ) ) * var(--elevation-slope)) + var(--elevation-min));
+    --elevation: clamp(calc(var(--elevation-min) * 1rem), calc( var(--elevation-calculator) * 1rem + var(--elevation-slope) * 100vmin * var(--elevation-direction) ), calc(var(--elevation-max) * 1rem));
+    --elevation-direction: 1; --elevation-min: 0; --elevation-max: 0;
+
+    --shadow-r: 0;--shadow-g: 0;--shadow-b: 0;
+    --shadow-1y: calc( var(--elevation) * 1.8 ); --shadow-1b: calc( var(--elevation) * 0.625 ); --shadow-1s: calc( var(--elevation) * -0.291);
+    --shadow-a1: 0.15;
+    --shadow-2y: calc( var(--elevation) * 1 ); --shadow-2b: calc( var(--elevation) * 1.58 ); --shadow-2s: calc( var(--elevation) * 0.125);
+    --shadow-a2: 0.1;
+    --shadow-3y: calc( var(--elevation) * 0.375 ); --shadow-3b: calc( var(--elevation) * 1.91 ); --shadow-3s: calc( var(--elevation) * 0.33 );
+    --shadow-a3: 0.08;
+    --shadow: 0 var(--shadow-1y) var(--shadow-1b) var(--shadow-1s) rgba(var(--shadow-r),var(--shadow-g),var(--shadow-b),var(--shadow-a1)),
+              0 var(--shadow-2y) var(--shadow-2b) var(--shadow-2s) rgba(var(--shadow-r),var(--shadow-g),var(--shadow-b),var(--shadow-a2)),
+              0 var(--shadow-3y) var(--shadow-3b) var(--shadow-3s) rgba(var(--shadow-r),var(--shadow-g),var(--shadow-b),var(--shadow-a3));
+
+    --bg: rgba(var(--bg-r),var(--bg-g),var(--bg-b),var(--bg-o));
+    --bg-r: 0;
+    --bg-g: 0;
+    --bg-b: 0;
+    --bg-o: 0;
+
+    --color: rgba(var(--color-r),var(--color-g),var(--color-b),var(--color-o));
+}
+
+/* COLOR */
+.bg { --bg-r : var(--bg-color-r); --bg-g : var(--bg-color-g); --bg-b : var(--bg-color-b); --bg-o: 1; }
+.fg1{ --bg-r : var(--fg1-color-r); --bg-g : var(--fg1-color-g); --bg-b : var(--fg1-color-b); --bg-o: 1; }
+.fg2{ --bg-r : var(--fg2-color-r); --bg-g : var(--fg2-color-g); --bg-b : var(--fg2-color-b); --bg-o: 1; }
+.primary{ --color-r : var(--primary-color-r); --color-g : var(--primary-color-g); --color-b : var(--primary-color-b); --color-o: 1; }
+.secondary{ --color-r : var(--secondary-color-r); --color-g : var(--secondary-color-g); --color-b : var(--secondary-color-b); --color-o: 1; }
+
+*[class^="bg-"], *[class*=" bg-"] {
+    --bg-o: 1;
+}
+
+.bg-dark { --bg-r : var(--dark-color-r); --bg-g : var(--dark-color-g); --bg-b : var(--dark-color-b); }
+.bg-darkL { --bg-r : var(--darkL-color-r); --bg-g : var(--darkL-color-g); --bg-b : var(--darkL-color-b); }
+.bg-darkVL { --bg-r : var(--darkVL-color-r); --bg-g : var(--darkVL-color-g); --bg-b : var(--darkVL-color-b); }
+.bg-clear { --bg-r : var(--clear-color-r); --bg-g : var(--clear-color-g); --bg-b : var(--clear-color-b); }
+.bg-clearL { --bg-r : var(--clearL-color-r); --bg-g : var(--clearL-color-g); --bg-b : var(--clearL-color-b); }
+.bg-clearVL { --bg-r : var(--clearVL-color-r); --bg-g : var(--clearVL-color-g); --bg-b : var(--clearVL-color-b); }
+.bg-1 { --bg-r : var(--palette1-r); --bg-g : var(--palette1-g); --bg-b : var(--palette1-b); }
+.bg-2 { --bg-r : var(--palette2-r); --bg-g : var(--palette2-g); --bg-b : var(--palette2-b); }
+.bg-3 { --bg-r : var(--palette3-r); --bg-g : var(--palette3-g); --bg-b : var(--palette3-b); }
+.bg-4 { --bg-r : var(--palette4-r); --bg-g : var(--palette4-g); --bg-b : var(--palette4-b); }
+.bg-5 { --bg-r : var(--palette5-r); --bg-g : var(--palette5-g); --bg-b : var(--palette5-b); }
+
+.color-dark { --color-r : var(--dark-color-r); --color-g : var(--dark-color-g); --color-b : var(--dark-color-b); }
+.color-darkL { --color-r : var(--darkL-color-r); --color-g : var(--darkL-color-g); --color-b : var(--darkL-color-b); }
+.color-darkVL { --color-r : var(--darkVL-color-r); --color-g : var(--darkVL-color-g); --color-b : var(--darkVL-color-b); }
+.color-clear { --color-r : var(--clear-color-r); --color-g : var(--clear-color-g); --color-b : var(--clear-color-b); }
+.color-clearL { --color-r : var(--clearL-color-r); --color-g : var(--clearL-color-g); --color-b : var(--clearL-color-b); }
+.color-clearVL { --color-r : var(--clearVL-color-r); --color-g : var(--clearVL-color-g); --color-b : var(--clearVL-color-b); }
+.color-1 { --color-r : var(--palette1-r); --color-g : var(--palette1-g); --color-b : var(--palette1-b); }
+.color-2 { --color-r : var(--palette2-r); --color-g : var(--palette2-g); --color-b : var(--palette2-b); }
+.color-3 { --color-r : var(--palette3-r); --color-g : var(--palette3-g); --color-b : var(--palette3-b); }
+.color-4 { --color-r : var(--palette4-r); --color-g : var(--palette4-g); --color-b : var(--palette4-b); }
+.color-5 { --color-r : var(--palette5-r); --color-g : var(--palette5-g); --color-b : var(--palette5-b); }
+
+/** PADDING **/
+.p-mins-sm { --p-min-vwp: var(--sm-screen); }
+.p-mins-md { --p-min-vwp: var(--md-screen); }
+.p-mins-lg { --p-min-vwp: var(--lg-screen); }
+.p-mins-xl { --p-min-vwp: var(--xl-screen); }
+
+.p-maxs-sm { --p-max-vwp: var(--sm-screen); }
+.p-maxs-md { --p-max-vwp: var(--md-screen); }
+.p-maxs-lg { --p-max-vwp: var(--lg-screen); }
+.p-maxs-xl { --p-max-vwp: var(--xl-screen); }
+
+*[class^="pt-"], *[class*=" pt-"] {
+    --pt-slope: calc( (var(--pt-max) - var(--pt-min)) / (var(--p-max-vwp) - var(--p-min-vwp)) );
+    --pt-calculator : calc( (-1 * var(--pt-direction) * ( (var(--p-max-vwp) * ( -1 + var(--pt-direction) ) / -2 ) + (var(--p-min-vwp) * ( 1 + var(--pt-direction) ) / 2 ) ) * var(--pt-slope)) + var(--pt-min));
+    --pt: clamp(calc(var(--pt-min) * 1rem), calc( var(--pt-calculator) * 1rem + var(--pt-slope) * 100vmin * var(--pt-direction) ), calc(var(--pt-max) * 1rem));
+}
+
+*[class^="pb-"], *[class*=" pb-"] {
+    --pb-slope: calc( (var(--pb-max) - var(--pb-min)) / (var(--p-max-vwp) - var(--p-min-vwp)) );
+    --pb-calculator : calc( (-1 * var(--pb-direction) * ( (var(--p-max-vwp) * ( -1 + var(--pb-direction) ) / -2 ) + (var(--p-min-vwp) * ( 1 + var(--pb-direction) ) / 2 ) ) * var(--pb-slope)) + var(--pb-min));
+    --pb: clamp(calc(var(--pb-min) * 1rem), calc( var(--pb-calculator) * 1rem + var(--pb-slope) * 100vmin * var(--pb-direction) ), calc(var(--pb-max) * 1rem));
+}
+
+*[class^="pl-"], *[class*=" pl-"] {
+    --pl-slope: calc( (var(--pl-max) - var(--pl-min)) / (var(--p-max-vwp) - var(--p-min-vwp)) );
+    --pl-calculator : calc( (-1 * var(--pl-direction) * ( (var(--p-max-vwp) * ( -1 + var(--pl-direction) ) / -2 ) + (var(--p-min-vwp) * ( 1 + var(--pl-direction) ) / 2 ) ) * var(--pl-slope)) + var(--pl-min));
+    --pl: clamp(calc(var(--pl-min) * 1rem), calc( var(--pl-calculator) * 1rem + var(--pl-slope) * 100vmin * var(--pl-direction) ), calc(var(--pl-max) * 1rem));
+}
+
+*[class^="pr-"], *[class*=" pr-"] {
+    --pr-slope: calc( (var(--pr-max) - var(--pr-min)) / (var(--p-max-vwp) - var(--p-min-vwp)) );
+    --pr-calculator : calc( (-1 * var(--pr-direction) * ( (var(--p-max-vwp) * ( -1 + var(--pr-direction) ) / -2 ) + (var(--p-min-vwp) * ( 1 + var(--pr-direction) ) / 2 ) ) * var(--pr-slope)) + var(--pr-min));
+    --pr: clamp(calc(var(--pr-min) * 1rem), calc( var(--pr-calculator) * 1rem + var(--pr-slope) * 100vmin * var(--pr-direction) ), calc(var(--pr-max) * 1rem));
+}
+
+*[class^="px-"], *[class*=" px-"] {
+    --px-slope: calc( (var(--px-max) - var(--px-min)) / (var(--p-max-vwp) - var(--p-min-vwp)) );
+    --px-calculator : calc( (-1 * var(--px-direction) * ( (var(--p-max-vwp) * ( -1 + var(--px-direction) ) / -2 ) + (var(--p-min-vwp) * ( 1 + var(--px-direction) ) / 2 ) ) * var(--px-slope)) + var(--px-min));
+    --px: clamp(calc(var(--px-min) * 1rem), calc( var(--px-calculator) * 1rem + var(--px-slope) * 100vmin * var(--px-direction) ), calc(var(--px-max) * 1rem));
+}
+
+*[class^="py-"], *[class*=" py-"] {
+    --py-slope: calc( (var(--py-max) - var(--py-min)) / (var(--p-max-vwp) - var(--p-min-vwp)) );
+    --py-calculator : calc( (-1 * var(--py-direction) * ( (var(--p-max-vwp) * ( -1 + var(--py-direction) ) / -2 ) + (var(--p-min-vwp) * ( 1 + var(--py-direction) ) / 2 ) ) * var(--py-slope)) + var(--py-min));
+    --py: clamp(calc(var(--py-min) * 1rem), calc( var(--py-calculator) * 1rem + var(--py-slope) * 100vmin * var(--py-direction) ), calc(var(--py-max) * 1rem));
+}
+
+.p-invert { --p-direction : -1; }
+.pl-invert { --pl-direction : -1; }
+.pr-invert { --pr-direction : -1; }
+.pt-invert { --pt-direction : -1; }
+.pb-invert { --pb-direction : -1; }
+.px-invert { --px-direction : -1; }
+.py-invert { --py-direction : -1; }
+
+.p-0 { --p-min: var(--size-0); --p-max: var(--size-0); } .pt-0 { --pt-min: var(--size-0); --pt-max: var(--size-0); } .pb-0 { --pb-min: var(--size-0); --pb-max: var(--size-0); } .pl-0 { --pl-min: var(--size-0); --pl-max: var(--size-0); } .pr-0 { --pr-min: var(--size-0); --pr-max: var(--size-0); } .px-0 { --px-min: var(--size-0); --px-max: var(--size-0); } .py-0 { --py-min: var(--size-0); --py-max: var(--size-0); }
+.p-1 { --p-min: var(--size-1); --p-max: var(--size-1); } .pt-1 { --pt-min: var(--size-1); --pt-max: var(--size-1); } .pb-1 { --pb-min: var(--size-1); --pb-max: var(--size-1); } .pl-1 { --pl-min: var(--size-1); --pl-max: var(--size-1); } .pr-1 { --pr-min: var(--size-1); --pr-max: var(--size-1); } .px-1 { --px-min: var(--size-1); --px-max: var(--size-1); } .py-1 { --py-min: var(--size-1); --py-max: var(--size-1); }
+.p-2 { --p-min: var(--size-2); --p-max: var(--size-2); } .pt-2 { --pt-min: var(--size-2); --pt-max: var(--size-2); } .pb-2 { --pb-min: var(--size-2); --pb-max: var(--size-2); } .pl-2 { --pl-min: var(--size-2); --pl-max: var(--size-2); } .pr-2 { --pr-min: var(--size-2); --pr-max: var(--size-2); } .px-2 { --px-min: var(--size-2); --px-max: var(--size-2); } .py-2 { --py-min: var(--size-2); --py-max: var(--size-2); }
+.p-3 { --p-min: var(--size-3); --p-max: var(--size-3); } .pt-3 { --pt-min: var(--size-3); --pt-max: var(--size-3); } .pb-3 { --pb-min: var(--size-3); --pb-max: var(--size-3); } .pl-3 { --pl-min: var(--size-3); --pl-max: var(--size-3); } .pr-3 { --pr-min: var(--size-3); --pr-max: var(--size-3); } .px-3 { --px-min: var(--size-3); --px-max: var(--size-3); } .py-3 { --py-min: var(--size-3); --py-max: var(--size-3); }
+.p-4 { --p-min: var(--size-4); --p-max: var(--size-4); } .pt-4 { --pt-min: var(--size-4); --pt-max: var(--size-4); } .pb-4 { --pb-min: var(--size-4); --pb-max: var(--size-4); } .pl-4 { --pl-min: var(--size-4); --pl-max: var(--size-4); } .pr-4 { --pr-min: var(--size-4); --pr-max: var(--size-4); } .px-4 { --px-min: var(--size-4); --px-max: var(--size-4); } .py-4 { --py-min: var(--size-4); --py-max: var(--size-4); }
+.p-5 { --p-min: var(--size-5); --p-max: var(--size-5); } .pt-5 { --pt-min: var(--size-5); --pt-max: var(--size-5); } .pb-5 { --pb-min: var(--size-5); --pb-max: var(--size-5); } .pl-5 { --pl-min: var(--size-5); --pl-max: var(--size-5); } .pr-5 { --pr-min: var(--size-5); --pr-max: var(--size-5); } .px-5 { --px-min: var(--size-5); --px-max: var(--size-5); } .py-5 { --py-min: var(--size-5); --py-max: var(--size-5); }
+.p-6 { --p-min: var(--size-6); --p-max: var(--size-6); } .pt-6 { --pt-min: var(--size-6); --pt-max: var(--size-6); } .pb-6 { --pb-min: var(--size-6); --pb-max: var(--size-6); } .pl-6 { --pl-min: var(--size-6); --pl-max: var(--size-6); } .pr-6 { --pr-min: var(--size-6); --pr-max: var(--size-6); } .px-6 { --px-min: var(--size-6); --px-max: var(--size-6); } .py-6 { --py-min: var(--size-6); --py-max: var(--size-6); }
+.p-8 { --p-min: var(--size-8); --p-max: var(--size-8); } .pt-8 { --pt-min: var(--size-8); --pt-max: var(--size-8); } .pb-8 { --pb-min: var(--size-8); --pb-max: var(--size-8); } .pl-8 { --pl-min: var(--size-8); --pl-max: var(--size-8); } .pr-8 { --pr-min: var(--size-8); --pr-max: var(--size-8); } .px-8 { --px-min: var(--size-8); --px-max: var(--size-8); } .py-8 { --py-min: var(--size-8); --py-max: var(--size-8); }
+.p-10 { --p-min: var(--size-10); --p-max: var(--size-10); } .pt-10 { --pt-min: var(--size-10); --pt-max: var(--size-10); } .pb-10 { --pb-min: var(--size-10); --pb-max: var(--size-10); } .pl-10 { --pl-min: var(--size-10); --pl-max: var(--size-10); } .pr-10 { --pr-min: var(--size-10); --pr-max: var(--size-10); } .px-10 { --px-min: var(--size-10); --px-max: var(--size-10); } .py-10 { --py-min: var(--size-10); --py-max: var(--size-10); }
+.p-12 { --p-min: var(--size-12); --p-max: var(--size-12); } .pt-12 { --pt-min: var(--size-12); --pt-max: var(--size-12); } .pb-12 { --pb-min: var(--size-12); --pb-max: var(--size-12); } .pl-12 { --pl-min: var(--size-12); --pl-max: var(--size-12); } .pr-12 { --pr-min: var(--size-12); --pr-max: var(--size-12); } .px-12 { --px-min: var(--size-12); --px-max: var(--size-12); } .py-12 { --py-min: var(--size-12); --py-max: var(--size-12); }
+.p-16 { --p-min: var(--size-16); --p-max: var(--size-16); } .pt-16 { --pt-min: var(--size-16); --pt-max: var(--size-16); } .pb-16 { --pb-min: var(--size-16); --pb-max: var(--size-16); } .pl-16 { --pl-min: var(--size-16); --pl-max: var(--size-16); } .pr-16 { --pr-min: var(--size-16); --pr-max: var(--size-16); } .px-16 { --px-min: var(--size-16); --px-max: var(--size-16); } .py-16 { --py-min: var(--size-16); --py-max: var(--size-16); }
+.p-20 { --p-min: var(--size-20); --p-max: var(--size-20); } .pt-20 { --pt-min: var(--size-20); --pt-max: var(--size-20); } .pb-20 { --pb-min: var(--size-20); --pb-max: var(--size-20); } .pl-20 { --pl-min: var(--size-20); --pl-max: var(--size-20); } .pr-20 { --pr-min: var(--size-20); --pr-max: var(--size-20); } .px-20 { --px-min: var(--size-20); --px-max: var(--size-20); } .py-20 { --py-min: var(--size-20); --py-max: var(--size-20); }
+.p-24 { --p-min: var(--size-24); --p-max: var(--size-24); } .pt-24 { --pt-min: var(--size-24); --pt-max: var(--size-24); } .pb-24 { --pb-min: var(--size-24); --pb-max: var(--size-24); } .pl-24 { --pl-min: var(--size-24); --pl-max: var(--size-24); } .pr-24 { --pr-min: var(--size-24); --pr-max: var(--size-24); } .px-24 { --px-min: var(--size-24); --px-max: var(--size-24); } .py-24 { --py-min: var(--size-24); --py-max: var(--size-24); }
+.p-32 { --p-min: var(--size-32); --p-max: var(--size-32); } .pt-32 { --pt-min: var(--size-32); --pt-max: var(--size-32); } .pb-32 { --pb-min: var(--size-32); --pb-max: var(--size-32); } .pl-32 { --pl-min: var(--size-32); --pl-max: var(--size-32); } .pr-32 { --pr-min: var(--size-32); --pr-max: var(--size-32); } .px-32 { --px-min: var(--size-32); --px-max: var(--size-32); } .py-32 { --py-min: var(--size-32); --py-max: var(--size-32); }
+.p-40 { --p-min: var(--size-40); --p-max: var(--size-40); } .pt-40 { --pt-min: var(--size-40); --pt-max: var(--size-40); } .pb-40 { --pb-min: var(--size-40); --pb-max: var(--size-40); } .pl-40 { --pl-min: var(--size-40); --pl-max: var(--size-40); } .pr-40 { --pr-min: var(--size-40); --pr-max: var(--size-40); } .px-40 { --px-min: var(--size-40); --px-max: var(--size-40); } .py-40 { --py-min: var(--size-40); --py-max: var(--size-40); }
+.p-48 { --p-min: var(--size-48); --p-max: var(--size-48); } .pt-48 { --pt-min: var(--size-48); --pt-max: var(--size-48); } .pb-48 { --pb-min: var(--size-48); --pb-max: var(--size-48); } .pl-48 { --pl-min: var(--size-48); --pl-max: var(--size-48); } .pr-48 { --pr-min: var(--size-48); --pr-max: var(--size-48); } .px-48 { --px-min: var(--size-48); --px-max: var(--size-48); } .py-48 { --py-min: var(--size-48); --py-max: var(--size-48); }
+.p-56 { --p-min: var(--size-56); --p-max: var(--size-56); } .pt-56 { --pt-min: var(--size-56); --pt-max: var(--size-56); } .pb-56 { --pb-min: var(--size-56); --pb-max: var(--size-56); } .pl-56 { --pl-min: var(--size-56); --pl-max: var(--size-56); } .pr-56 { --pr-min: var(--size-56); --pr-max: var(--size-56); } .px-56 { --px-min: var(--size-56); --px-max: var(--size-56); } .py-56 { --py-min: var(--size-56); --py-max: var(--size-56); }
+.p-64 { --p-min: var(--size-64); --p-max: var(--size-64); } .pt-64 { --pt-min: var(--size-64); --pt-max: var(--size-64); } .pb-64 { --pb-min: var(--size-64); --pb-max: var(--size-64); } .pl-64 { --pl-min: var(--size-64); --pl-max: var(--size-64); } .pr-64 { --pr-min: var(--size-64); --pr-max: var(--size-64); } .px-64 { --px-min: var(--size-64); --px-max: var(--size-64); } .py-64 { --py-min: var(--size-64); --py-max: var(--size-64); }
+
+
+.to\:p-0 {--p-max: var(--size-0); } .to\:pt-0 {--pt-max: var(--size-0); } .to\:pb-0 {--pb-max: var(--size-0); } .to\:pl-0 {--pl-max: var(--size-0); } .to\:pr-0 {--pr-max: var(--size-0); } .to\:px-0 {--px-max: var(--size-0); } .to\:py-0 {--py-max: var(--size-0); }
+.to\:p-1 {--p-max: var(--size-1); } .to\:pt-1 {--pt-max: var(--size-1); } .to\:pb-1 {--pb-max: var(--size-1); } .to\:pl-1 {--pl-max: var(--size-1); } .to\:pr-1 {--pr-max: var(--size-1); } .to\:px-1 {--px-max: var(--size-1); } .to\:py-1 {--py-max: var(--size-1); }
+.to\:p-2 {--p-max: var(--size-2); } .to\:pt-2 {--pt-max: var(--size-2); } .to\:pb-2 {--pb-max: var(--size-2); } .to\:pl-2 {--pl-max: var(--size-2); } .to\:pr-2 {--pr-max: var(--size-2); } .to\:px-2 {--px-max: var(--size-2); } .to\:py-2 {--py-max: var(--size-2); }
+.to\:p-3 {--p-max: var(--size-3); } .to\:pt-3 {--pt-max: var(--size-3); } .to\:pb-3 {--pb-max: var(--size-3); } .to\:pl-3 {--pl-max: var(--size-3); } .to\:pr-3 {--pr-max: var(--size-3); } .to\:px-3 {--px-max: var(--size-3); } .to\:py-3 {--py-max: var(--size-3); }
+.to\:p-4 {--p-max: var(--size-4); } .to\:pt-4 {--pt-max: var(--size-4); } .to\:pb-4 {--pb-max: var(--size-4); } .to\:pl-4 {--pl-max: var(--size-4); } .to\:pr-4 {--pr-max: var(--size-4); } .to\:px-4 {--px-max: var(--size-4); } .to\:py-4 {--py-max: var(--size-4); }
+.to\:p-5 {--p-max: var(--size-5); } .to\:pt-5 {--pt-max: var(--size-5); } .to\:pb-5 {--pb-max: var(--size-5); } .to\:pl-5 {--pl-max: var(--size-5); } .to\:pr-5 {--pr-max: var(--size-5); } .to\:px-5 {--px-max: var(--size-5); } .to\:py-5 {--py-max: var(--size-5); }
+.to\:p-6 {--p-max: var(--size-6); } .to\:pt-6 {--pt-max: var(--size-6); } .to\:pb-6 {--pb-max: var(--size-6); } .to\:pl-6 {--pl-max: var(--size-6); } .to\:pr-6 {--pr-max: var(--size-6); } .to\:px-6 {--px-max: var(--size-6); } .to\:py-6 {--py-max: var(--size-6); }
+.to\:p-8 {--p-max: var(--size-8); } .to\:pt-8 {--pt-max: var(--size-8); } .to\:pb-8 {--pb-max: var(--size-8); } .to\:pl-8 {--pl-max: var(--size-8); } .to\:pr-8 {--pr-max: var(--size-8); } .to\:px-8 {--px-max: var(--size-8); } .to\:py-8 {--py-max: var(--size-8); }
+.to\:p-10 {--p-max: var(--size-10); } .to\:pt-10 {--pt-max: var(--size-10); } .to\:pb-10 {--pb-max: var(--size-10); } .to\:pl-10 {--pl-max: var(--size-10); } .to\:pr-10 {--pr-max: var(--size-10); } .to\:px-10 {--px-max: var(--size-10); } .to\:py-10 {--py-max: var(--size-10); }
+.to\:p-12 {--p-max: var(--size-12); } .to\:pt-12 {--pt-max: var(--size-12); } .to\:pb-12 {--pb-max: var(--size-12); } .to\:pl-12 {--pl-max: var(--size-12); } .to\:pr-12 {--pr-max: var(--size-12); } .to\:px-12 {--px-max: var(--size-12); } .to\:py-12 {--py-max: var(--size-12); }
+.to\:p-16 {--p-max: var(--size-16); } .to\:pt-16 {--pt-max: var(--size-16); } .to\:pb-16 {--pb-max: var(--size-16); } .to\:pl-16 {--pl-max: var(--size-16); } .to\:pr-16 {--pr-max: var(--size-16); } .to\:px-16 {--px-max: var(--size-16); } .to\:py-16 {--py-max: var(--size-16); }
+.to\:p-20 {--p-max: var(--size-20); } .to\:pt-20 {--pt-max: var(--size-20); } .to\:pb-20 {--pb-max: var(--size-20); } .to\:pl-20 {--pl-max: var(--size-20); } .to\:pr-20 {--pr-max: var(--size-20); } .to\:px-20 {--px-max: var(--size-20); } .to\:py-20 {--py-max: var(--size-20); }
+.to\:p-24 {--p-max: var(--size-24); } .to\:pt-24 {--pt-max: var(--size-24); } .to\:pb-24 {--pb-max: var(--size-24); } .to\:pl-24 {--pl-max: var(--size-24); } .to\:pr-24 {--pr-max: var(--size-24); } .to\:px-24 {--px-max: var(--size-24); } .to\:py-24 {--py-max: var(--size-24); }
+.to\:p-32 {--p-max: var(--size-32); } .to\:pt-32 {--pt-max: var(--size-32); } .to\:pb-32 {--pb-max: var(--size-32); } .to\:pl-32 {--pl-max: var(--size-32); } .to\:pr-32 {--pr-max: var(--size-32); } .to\:px-32 {--px-max: var(--size-32); } .to\:py-32 {--py-max: var(--size-32); }
+.to\:p-40 {--p-max: var(--size-40); } .to\:pt-40 {--pt-max: var(--size-40); } .to\:pb-40 {--pb-max: var(--size-40); } .to\:pl-40 {--pl-max: var(--size-40); } .to\:pr-40 {--pr-max: var(--size-40); } .to\:px-40 {--px-max: var(--size-40); } .to\:py-40 {--py-max: var(--size-40); }
+.to\:p-48 {--p-max: var(--size-48); } .to\:pt-48 {--pt-max: var(--size-48); } .to\:pb-48 {--pb-max: var(--size-48); } .to\:pl-48 {--pl-max: var(--size-48); } .to\:pr-48 {--pr-max: var(--size-48); } .to\:px-48 {--px-max: var(--size-48); } .to\:py-48 {--py-max: var(--size-48); }
+.to\:p-56 {--p-max: var(--size-56); } .to\:pt-56 {--pt-max: var(--size-56); } .to\:pb-56 {--pb-max: var(--size-56); } .to\:pl-56 {--pl-max: var(--size-56); } .to\:pr-56 {--pr-max: var(--size-56); } .to\:px-56 {--px-max: var(--size-56); } .to\:py-56 {--py-max: var(--size-56); }
+.to\:p-64 {--p-max: var(--size-64); } .to\:pt-64 {--pt-max: var(--size-64); } .to\:pb-64 {--pb-max: var(--size-64); } .to\:pl-64 {--pl-max: var(--size-64); } .to\:pr-64 {--pr-max: var(--size-64); } .to\:px-64 {--px-max: var(--size-64); } .to\:py-64 {--py-max: var(--size-64); }
+
+/** MARGIN **/
+.m-mins-sm { --m-min-vwp: var(--sm-screen); }
+.m-mins-md { --m-min-vwp: var(--md-screen); }
+.m-mins-lg { --m-min-vwp: var(--lg-screen); }
+.m-mins-xl { --m-min-vwp: var(--xl-screen); }
+
+.m-maxs-sm { --m-max-vwp: var(--sm-screen); }
+.m-maxs-md { --m-max-vwp: var(--md-screen); }
+.m-maxs-lg { --m-max-vwp: var(--lg-screen); }
+.m-maxs-xl { --m-max-vwp: var(--xl-screen); }
+
+*[class^="mt-"], *[class*=" mt-"] {
+    --mt-slope: calc( (var(--mt-max) - var(--mt-min)) / (var(--m-max-vwp) - var(--m-min-vwp)) );
+    --mt-calculator : calc( (-1 * var(--mt-direction) * ( (var(--m-max-vwp) * ( -1 + var(--mt-direction) ) / -2 ) + (var(--m-min-vwp) * ( 1 + var(--mt-direction) ) / 2 ) ) * var(--mt-slope)) + var(--mt-min));
+    --mt: clamp(calc(var(--mt-min) * 1rem), calc( var(--mt-calculator) * 1rem + var(--mt-slope) * 100vmin * var(--mt-direction) ), calc(var(--mt-max) * 1rem));
+}
+
+*[class^="mb-"], *[class*=" mb-"] {
+    --mb-slope: calc( (var(--mb-max) - var(--mb-min)) / (var(--m-max-vwp) - var(--m-min-vwp)) );
+    --mb-calculator : calc( (-1 * var(--mb-direction) * ( (var(--m-max-vwp) * ( -1 + var(--mb-direction) ) / -2 ) + (var(--m-min-vwp) * ( 1 + var(--mb-direction) ) / 2 ) ) * var(--mb-slope)) + var(--mb-min));
+    --mb: clamp(calc(var(--mb-min) * 1rem), calc( var(--mb-calculator) * 1rem + var(--mb-slope) * 100vmin * var(--mb-direction) ), calc(var(--mb-max) * 1rem));
+}
+
+*[class^="ml-"], *[class*=" ml-"] {
+    --ml-slope: calc( (var(--ml-max) - var(--ml-min)) / (var(--m-max-vwp) - var(--m-min-vwp)) );
+    --ml-calculator : calc( (-1 * var(--ml-direction) * ( (var(--m-max-vwp) * ( -1 + var(--ml-direction) ) / -2 ) + (var(--m-min-vwp) * ( 1 + var(--ml-direction) ) / 2 ) ) * var(--ml-slope)) + var(--ml-min));
+    --ml: clamp(calc(var(--ml-min) * 1rem), calc( var(--ml-calculator) * 1rem + var(--ml-slope) * 100vmin * var(--ml-direction) ), calc(var(--ml-max) * 1rem));
+}
+
+*[class^="mr-"], *[class*=" mr-"] {
+    --mr-slope: calc( (var(--mr-max) - var(--mr-min)) / (var(--m-max-vwp) - var(--m-min-vwp)) );
+    --mr-calculator : calc( (-1 * var(--mr-direction) * ( (var(--m-max-vwp) * ( -1 + var(--mr-direction) ) / -2 ) + (var(--m-min-vwp) * ( 1 + var(--mr-direction) ) / 2 ) ) * var(--mr-slope)) + var(--mr-min));
+    --mr: clamp(calc(var(--mr-min) * 1rem), calc( var(--mr-calculator) * 1rem + var(--mr-slope) * 100vmin * var(--mr-direction) ), calc(var(--mr-max) * 1rem));
+}
+
+*[class^="mx-"], *[class*=" mx-"] {
+--mx-slope: calc( (var(--mx-max) - var(--mx-min)) / (var(--m-max-vwp) - var(--m-min-vwp)) );
+--mx-calculator : calc( (-1 * var(--mx-direction) * ( (var(--m-max-vwp) * ( -1 + var(--mx-direction) ) / -2 ) + (var(--m-min-vwp) * ( 1 + var(--mx-direction) ) / 2 ) ) * var(--mx-slope)) + var(--mx-min));
+    --mx: clamp(calc(var(--mx-min) * 1rem), calc( var(--mx-calculator) * 1rem + var(--mx-slope) * 100vmin * var(--mx-direction) ), calc(var(--mx-max) * 1rem));
+}
+
+*[class^="my-"], *[class*=" my-"] {
+    --my-slope: calc( (var(--my-max) - var(--my-min)) / (var(--m-max-vwp) - var(--m-min-vwp)) );
+    --my-calculator : calc( (-1 * var(--my-direction) * ( (var(--m-max-vwp) * ( -1 + var(--my-direction) ) / -2 ) + (var(--m-min-vwp) * ( 1 + var(--my-direction) ) / 2 ) ) * var(--my-slope)) + var(--my-min));
+    --my: clamp(calc(var(--my-min) * 1rem), calc( var(--my-calculator) * 1rem + var(--my-slope) * 100vmin * var(--my-direction) ), calc(var(--my-max) * 1rem));
+}
+
+.m-invert { --m-direction : -1; }
+.ml-invert { --ml-direction : -1; }
+.mr-invert { --mr-direction : -1; }
+.mt-invert { --mt-direction : -1; }
+.mb-invert { --mb-direction : -1; }
+.mx-invert { --mx-direction : -1; }
+.my-invert { --my-direction : -1; }
+
+.m-0 { --m-min: var(--size-0); --m-max: var(--size-0); } .mt-0 { --mt-min: var(--size-0); --mt-max: var(--size-0); } .mb-0 { --mb-min: var(--size-0); --mb-max: var(--size-0); } .pl-0 { --ml-min: var(--size-0); --ml-max: var(--size-0); } .mr-0 { --mr-min: var(--size-0); --mr-max: var(--size-0); } .mx-0 { --mx-min: var(--size-0); --mx-max: var(--size-0); } .my-0 { --my-min: var(--size-0); --my-max: var(--size-0); }
+.m-1 { --m-min: var(--size-1); --m-max: var(--size-1); } .mt-1 { --mt-min: var(--size-1); --mt-max: var(--size-1); } .mb-1 { --mb-min: var(--size-1); --mb-max: var(--size-1); } .ml-1 { --ml-min: var(--size-1); --ml-max: var(--size-1); } .mr-1 { --mr-min: var(--size-1); --mr-max: var(--size-1); } .mx-1 { --mx-min: var(--size-1); --mx-max: var(--size-1); } .my-1 { --my-min: var(--size-1); --my-max: var(--size-1); }
+.m-2 { --m-min: var(--size-2); --m-max: var(--size-2); } .mt-2 { --mt-min: var(--size-2); --mt-max: var(--size-2); } .mb-2 { --mb-min: var(--size-2); --mb-max: var(--size-2); } .ml-2 { --ml-min: var(--size-2); --ml-max: var(--size-2); } .mr-2 { --mr-min: var(--size-2); --mr-max: var(--size-2); } .mx-2 { --mx-min: var(--size-2); --mx-max: var(--size-2); } .my-2 { --my-min: var(--size-2); --my-max: var(--size-2); }
+.m-3 { --m-min: var(--size-3); --m-max: var(--size-3); } .mt-3 { --mt-min: var(--size-3); --mt-max: var(--size-3); } .mb-3 { --mb-min: var(--size-3); --mb-max: var(--size-3); } .ml-3 { --ml-min: var(--size-3); --ml-max: var(--size-3); } .mr-3 { --mr-min: var(--size-3); --mr-max: var(--size-3); } .mx-3 { --mx-min: var(--size-3); --mx-max: var(--size-3); } .my-3 { --my-min: var(--size-3); --my-max: var(--size-3); }
+.m-4 { --m-min: var(--size-4); --m-max: var(--size-4); } .mt-4 { --mt-min: var(--size-4); --mt-max: var(--size-4); } .mb-4 { --mb-min: var(--size-4); --mb-max: var(--size-4); } .ml-4 { --ml-min: var(--size-4); --ml-max: var(--size-4); } .mr-4 { --mr-min: var(--size-4); --mr-max: var(--size-4); } .mx-4 { --mx-min: var(--size-4); --mx-max: var(--size-4); } .my-4 { --my-min: var(--size-4); --my-max: var(--size-4); }
+.m-5 { --m-min: var(--size-5); --m-max: var(--size-5); } .mt-5 { --mt-min: var(--size-5); --mt-max: var(--size-5); } .mb-5 { --mb-min: var(--size-5); --mb-max: var(--size-5); } .ml-5 { --ml-min: var(--size-5); --ml-max: var(--size-5); } .mr-5 { --mr-min: var(--size-5); --mr-max: var(--size-5); } .mx-5 { --mx-min: var(--size-5); --mx-max: var(--size-5); } .my-5 { --my-min: var(--size-5); --my-max: var(--size-5); }
+.m-6 { --m-min: var(--size-6); --m-max: var(--size-6); } .mt-6 { --mt-min: var(--size-6); --mt-max: var(--size-6); } .mb-6 { --mb-min: var(--size-6); --mb-max: var(--size-6); } .ml-6 { --ml-min: var(--size-6); --ml-max: var(--size-6); } .mr-6 { --mr-min: var(--size-6); --mr-max: var(--size-6); } .mx-6 { --mx-min: var(--size-6); --mx-max: var(--size-6); } .my-6 { --my-min: var(--size-6); --my-max: var(--size-6); }
+.m-8 { --m-min: var(--size-8); --m-max: var(--size-8); } .mt-8 { --mt-min: var(--size-8); --mt-max: var(--size-8); } .mb-8 { --mb-min: var(--size-8); --mb-max: var(--size-8); } .ml-8 { --ml-min: var(--size-8); --ml-max: var(--size-8); } .mr-8 { --mr-min: var(--size-8); --mr-max: var(--size-8); } .mx-8 { --mx-min: var(--size-8); --mx-max: var(--size-8); } .my-8 { --my-min: var(--size-8); --my-max: var(--size-8); }
+.m-10 { --m-min: var(--size-10); --m-max: var(--size-10); } .mt-10 { --mt-min: var(--size-10); --mt-max: var(--size-10); } .mb-10 { --mb-min: var(--size-10); --mb-max: var(--size-10); } .ml-10 { --ml-min: var(--size-10); --ml-max: var(--size-10); } .mr-10 { --mr-min: var(--size-10); --mr-max: var(--size-10); } .mx-10 { --mx-min: var(--size-10); --mx-max: var(--size-10); } .my-10 { --my-min: var(--size-10); --my-max: var(--size-10); }
+.m-12 { --m-min: var(--size-12); --m-max: var(--size-12); } .mt-12 { --mt-min: var(--size-12); --mt-max: var(--size-12); } .mb-12 { --mb-min: var(--size-12); --mb-max: var(--size-12); } .ml-12 { --ml-min: var(--size-12); --ml-max: var(--size-12); } .mr-12 { --mr-min: var(--size-12); --mr-max: var(--size-12); } .mx-12 { --mx-min: var(--size-12); --mx-max: var(--size-12); } .my-12 { --my-min: var(--size-12); --my-max: var(--size-12); }
+.m-16 { --m-min: var(--size-16); --m-max: var(--size-16); } .mt-16 { --mt-min: var(--size-16); --mt-max: var(--size-16); } .mb-16 { --mb-min: var(--size-16); --mb-max: var(--size-16); } .ml-16 { --ml-min: var(--size-16); --ml-max: var(--size-16); } .mr-16 { --mr-min: var(--size-16); --mr-max: var(--size-16); } .mx-16 { --mx-min: var(--size-16); --mx-max: var(--size-16); } .my-16 { --my-min: var(--size-16); --my-max: var(--size-16); }
+.m-20 { --m-min: var(--size-20); --m-max: var(--size-20); } .mt-20 { --mt-min: var(--size-20); --mt-max: var(--size-20); } .mb-20 { --mb-min: var(--size-20); --mb-max: var(--size-20); } .ml-20 { --ml-min: var(--size-20); --ml-max: var(--size-20); } .mr-20 { --mr-min: var(--size-20); --mr-max: var(--size-20); } .mx-20 { --mx-min: var(--size-20); --mx-max: var(--size-20); } .my-20 { --my-min: var(--size-20); --my-max: var(--size-20); }
+.m-24 { --m-min: var(--size-24); --m-max: var(--size-24); } .mt-24 { --mt-min: var(--size-24); --mt-max: var(--size-24); } .mb-24 { --mb-min: var(--size-24); --mb-max: var(--size-24); } .ml-24 { --ml-min: var(--size-24); --ml-max: var(--size-24); } .mr-24 { --mr-min: var(--size-24); --mr-max: var(--size-24); } .mx-24 { --mx-min: var(--size-24); --mx-max: var(--size-24); } .my-24 { --my-min: var(--size-24); --my-max: var(--size-24); }
+.m-32 { --m-min: var(--size-32); --m-max: var(--size-32); } .mt-32 { --mt-min: var(--size-32); --mt-max: var(--size-32); } .mb-32 { --mb-min: var(--size-32); --mb-max: var(--size-32); } .ml-32 { --ml-min: var(--size-32); --ml-max: var(--size-32); } .mr-32 { --mr-min: var(--size-32); --mr-max: var(--size-32); } .mx-32 { --mx-min: var(--size-32); --mx-max: var(--size-32); } .my-32 { --my-min: var(--size-32); --my-max: var(--size-32); }
+.m-40 { --m-min: var(--size-40); --m-max: var(--size-40); } .mt-40 { --mt-min: var(--size-40); --mt-max: var(--size-40); } .mb-40 { --mb-min: var(--size-40); --mb-max: var(--size-40); } .ml-40 { --ml-min: var(--size-40); --ml-max: var(--size-40); } .mr-40 { --mr-min: var(--size-40); --mr-max: var(--size-40); } .mx-40 { --mx-min: var(--size-40); --mx-max: var(--size-40); } .my-40 { --my-min: var(--size-40); --my-max: var(--size-40); }
+.m-48 { --m-min: var(--size-48); --m-max: var(--size-48); } .mt-48 { --mt-min: var(--size-48); --mt-max: var(--size-48); } .mb-48 { --mb-min: var(--size-48); --mb-max: var(--size-48); } .ml-48 { --ml-min: var(--size-48); --ml-max: var(--size-48); } .mr-48 { --mr-min: var(--size-48); --mr-max: var(--size-48); } .mx-48 { --mx-min: var(--size-48); --mx-max: var(--size-48); } .my-48 { --my-min: var(--size-48); --my-max: var(--size-48); }
+.m-56 { --m-min: var(--size-56); --m-max: var(--size-56); } .mt-56 { --mt-min: var(--size-56); --mt-max: var(--size-56); } .mb-56 { --mb-min: var(--size-56); --mb-max: var(--size-56); } .ml-56 { --ml-min: var(--size-56); --ml-max: var(--size-56); } .mr-56 { --mr-min: var(--size-56); --mr-max: var(--size-56); } .mx-56 { --mx-min: var(--size-56); --mx-max: var(--size-56); } .my-56 { --my-min: var(--size-56); --my-max: var(--size-56); }
+.m-64 { --m-min: var(--size-64); --m-max: var(--size-64); } .mt-64 { --mt-min: var(--size-64); --mt-max: var(--size-64); } .mb-64 { --mb-min: var(--size-64); --mb-max: var(--size-64); } .ml-64 { --ml-min: var(--size-64); --ml-max: var(--size-64); } .mr-64 { --mr-min: var(--size-64); --mr-max: var(--size-64); } .mx-64 { --mx-min: var(--size-64); --mx-max: var(--size-64); } .my-64 { --my-min: var(--size-64); --my-max: var(--size-64); }
+
+
+.to\:m-0 {--m-max: var(--size-0); } .to\:mt-0 {--mt-max: var(--size-0); } .to\:mb-0 {--mb-max: var(--size-0); } .to\:ml-0 {--ml-max: var(--size-0); } .to\:mr-0 {--mr-max: var(--size-0); } .to\:mx-0 {--mx-max: var(--size-0); } .to\:my-0 {--my-max: var(--size-0); }
+.to\:m-1 {--m-max: var(--size-1); } .to\:mt-1 {--mt-max: var(--size-1); } .to\:mb-1 {--mb-max: var(--size-1); } .to\:ml-1 {--ml-max: var(--size-1); } .to\:mr-1 {--mr-max: var(--size-1); } .to\:mx-1 {--mx-max: var(--size-1); } .to\:my-1 {--my-max: var(--size-1); }
+.to\:m-2 {--m-max: var(--size-2); } .to\:mt-2 {--mt-max: var(--size-2); } .to\:mb-2 {--mb-max: var(--size-2); } .to\:ml-2 {--ml-max: var(--size-2); } .to\:mr-2 {--mr-max: var(--size-2); } .to\:mx-2 {--mx-max: var(--size-2); } .to\:my-2 {--my-max: var(--size-2); }
+.to\:m-3 {--m-max: var(--size-3); } .to\:mt-3 {--mt-max: var(--size-3); } .to\:mb-3 {--mb-max: var(--size-3); } .to\:ml-3 {--ml-max: var(--size-3); } .to\:mr-3 {--mr-max: var(--size-3); } .to\:mx-3 {--mx-max: var(--size-3); } .to\:my-3 {--my-max: var(--size-3); }
+.to\:m-4 {--m-max: var(--size-4); } .to\:mt-4 {--mt-max: var(--size-4); } .to\:mb-4 {--mb-max: var(--size-4); } .to\:ml-4 {--ml-max: var(--size-4); } .to\:mr-4 {--mr-max: var(--size-4); } .to\:mx-4 {--mx-max: var(--size-4); } .to\:my-4 {--my-max: var(--size-4); }
+.to\:m-5 {--m-max: var(--size-5); } .to\:mt-5 {--mt-max: var(--size-5); } .to\:mb-5 {--mb-max: var(--size-5); } .to\:ml-5 {--ml-max: var(--size-5); } .to\:mr-5 {--mr-max: var(--size-5); } .to\:mx-5 {--mx-max: var(--size-5); } .to\:my-5 {--my-max: var(--size-5); }
+.to\:m-6 {--m-max: var(--size-6); } .to\:mt-6 {--mt-max: var(--size-6); } .to\:mb-6 {--mb-max: var(--size-6); } .to\:ml-6 {--ml-max: var(--size-6); } .to\:mr-6 {--mr-max: var(--size-6); } .to\:mx-6 {--mx-max: var(--size-6); } .to\:my-6 {--my-max: var(--size-6); }
+.to\:m-8 {--m-max: var(--size-8); } .to\:mt-8 {--mt-max: var(--size-8); } .to\:mb-8 {--mb-max: var(--size-8); } .to\:ml-8 {--ml-max: var(--size-8); } .to\:mr-8 {--mr-max: var(--size-8); } .to\:mx-8 {--mx-max: var(--size-8); } .to\:my-8 {--my-max: var(--size-8); }
+.to\:m-10 {--m-max: var(--size-10); } .to\:mt-10 {--mt-max: var(--size-10); } .to\:mb-10 {--mb-max: var(--size-10); } .to\:ml-10 {--ml-max: var(--size-10); } .to\:mr-10 {--mr-max: var(--size-10); } .to\:mx-10 {--mx-max: var(--size-10); } .to\:my-10 {--my-max: var(--size-10); }
+.to\:m-12 {--m-max: var(--size-12); } .to\:mt-12 {--mt-max: var(--size-12); } .to\:mb-12 {--mb-max: var(--size-12); } .to\:ml-12 {--ml-max: var(--size-12); } .to\:mr-12 {--mr-max: var(--size-12); } .to\:mx-12 {--mx-max: var(--size-12); } .to\:my-12 {--my-max: var(--size-12); }
+.to\:m-16 {--m-max: var(--size-16); } .to\:mt-16 {--mt-max: var(--size-16); } .to\:mb-16 {--mb-max: var(--size-16); } .to\:ml-16 {--ml-max: var(--size-16); } .to\:mr-16 {--mr-max: var(--size-16); } .to\:mx-16 {--mx-max: var(--size-16); } .to\:my-16 {--my-max: var(--size-16); }
+.to\:m-20 {--m-max: var(--size-20); } .to\:mt-20 {--mt-max: var(--size-20); } .to\:mb-20 {--mb-max: var(--size-20); } .to\:ml-20 {--ml-max: var(--size-20); } .to\:mr-20 {--mr-max: var(--size-20); } .to\:mx-20 {--mx-max: var(--size-20); } .to\:my-20 {--my-max: var(--size-20); }
+.to\:m-24 {--m-max: var(--size-24); } .to\:mt-24 {--mt-max: var(--size-24); } .to\:mb-24 {--mb-max: var(--size-24); } .to\:ml-24 {--ml-max: var(--size-24); } .to\:mr-24 {--mr-max: var(--size-24); } .to\:mx-24 {--mx-max: var(--size-24); } .to\:my-24 {--my-max: var(--size-24); }
+.to\:m-32 {--m-max: var(--size-32); } .to\:mt-32 {--mt-max: var(--size-32); } .to\:mb-32 {--mb-max: var(--size-32); } .to\:ml-32 {--ml-max: var(--size-32); } .to\:mr-32 {--mr-max: var(--size-32); } .to\:mx-32 {--mx-max: var(--size-32); } .to\:my-32 {--my-max: var(--size-32); }
+.to\:m-40 {--m-max: var(--size-40); } .to\:mt-40 {--mt-max: var(--size-40); } .to\:mb-40 {--mb-max: var(--size-40); } .to\:ml-40 {--ml-max: var(--size-40); } .to\:mr-40 {--mr-max: var(--size-40); } .to\:mx-40 {--mx-max: var(--size-40); } .to\:my-40 {--my-max: var(--size-40); }
+.to\:m-48 {--m-max: var(--size-48); } .to\:mt-48 {--mt-max: var(--size-48); } .to\:mb-48 {--mb-max: var(--size-48); } .to\:ml-48 {--ml-max: var(--size-48); } .to\:mr-48 {--mr-max: var(--size-48); } .to\:mx-48 {--mx-max: var(--size-48); } .to\:my-48 {--my-max: var(--size-48); }
+.to\:m-56 {--m-max: var(--size-56); } .to\:mt-56 {--mt-max: var(--size-56); } .to\:mb-56 {--mb-max: var(--size-56); } .to\:ml-56 {--ml-max: var(--size-56); } .to\:mr-56 {--mr-max: var(--size-56); } .to\:mx-56 {--mx-max: var(--size-56); } .to\:my-56 {--my-max: var(--size-56); }
+.to\:m-64 {--m-max: var(--size-64); } .to\:mt-64 {--mt-max: var(--size-64); } .to\:mb-64 {--mb-max: var(--size-64); } .to\:ml-64 {--ml-max: var(--size-64); } .to\:mr-64 {--mr-max: var(--size-64); } .to\:mx-64 {--mx-max: var(--size-64); } .to\:my-64 {--my-max: var(--size-64); }
+
+/* FONTSIZE */
+.fontsize-mins-sm { --fontsize-min-vwp: var(--sm-screen); }
+.fontsize-mins-md { --fontsize-min-vwp: var(--md-screen); }
+.fontsize-mins-lg { --fontsize-min-vwp: var(--lg-screen); }
+.fontsize-mins-xl { --fontsize-min-vwp: var(--xl-screen); }
+
+.fontsize-maxs-sm { --fontsize-max-vwp: var(--sm-screen); }
+.fontsize-maxs-md { --fontsize-max-vwp: var(--md-screen); }
+.fontsize-maxs-lg { --fontsize-max-vwp: var(--lg-screen); }
+.fontsize-maxs-xl { --fontsize-max-vwp: var(--xl-screen); }
+
+.fontsize-invert { --fontsize-direction : -1; }
+
+.text-0 { --fontsize-min: var(--size-0); --fontsize-max: var(--size-0); }
+.text-xs { --fontsize-min: var(--text-xs); --fontsize-max: var(--text-xs); }
+.text-sm { --fontsize-min: var(--text-sm); --fontsize-max: var(--text-sm); }
+.text-base { --fontsize-min: var(--text-base); --fontsize-max: var(--text-base); }
+.text-lg { --fontsize-min: var(--text-lg); --fontsize-max: var(--text-lg); }
+.text-xl { --fontsize-min: var(--text-xl); --fontsize-max: var(--text-xl); }
+.text-2xl { --fontsize-min: var(--text-2xl); --fontsize-max: var(--text-2xl); }
+.text-3xl { --fontsize-min: var(--text-3xl); --fontsize-max: var(--text-3xl); }
+.text-4xl { --fontsize-min: var(--text-4xl); --fontsize-max: var(--text-4xl); }
+.text-5xl { --fontsize-min: var(--text-5xl); --fontsize-max: var(--text-5xl); }
+.text-6xl { --fontsize-min: var(--text-6xl); --fontsize-max: var(--text-6xl); }
+
+.to\:text-0 { --fontsize-max: var(--size-0); }
+.to\:text-xs { --fontsize-max: var(--text-xs); }
+.to\:text-sm { --fontsize-max: var(--text-sm); }
+.to\:text-base { --fontsize-max: var(--text-base); }
+.to\:text-lg { --fontsize-max: var(--text-lg); }
+.to\:text-xl { --fontsize-max: var(--text-xl); }
+.to\:text-2xl { --fontsize-max: var(--text-2xl); }
+.to\:text-3xl { --fontsize-max: var(--text-3xl); }
+.to\:text-4xl { --fontsize-max: var(--text-4xl); }
+.to\:text-5xl { --fontsize-max: var(--text-5xl); }
+.to\:text-6xl { --fontsize-max: var(--text-6xl); }
+
+/* FONTSIZE */
+.weight-mins-sm { --weight-min-vwp: var(--sm-screen); }
+.weight-mins-md { --weight-min-vwp: var(--md-screen); }
+.weight-mins-lg { --weight-min-vwp: var(--lg-screen); }
+.weight-mins-xl { --weight-min-vwp: var(--xl-screen); }
+
+.weight-maxs-sm { --weight-max-vwp: var(--sm-screen); }
+.weight-maxs-md { --weight-max-vwp: var(--md-screen); }
+.weight-maxs-lg { --weight-max-vwp: var(--lg-screen); }
+.weight-maxs-xl { --weight-max-vwp: var(--xl-screen); }
+
+.weight-invert { --weight-direction : -1; }
+
+.weight-hairline { --weight-min: 100; --weight-max: 100; }
+.weight-thin { --weight-min: 200; --weight-max: 200; }
+.weight-light { --weight-min: 300; --weight-max: 300; }
+.weight-normal { --weight-min: 400; --weight-max: 400; }
+.weight-medium { --weight-min: 500; --weight-max: 500; }
+.weight-semibold { --weight-min: 600; --weight-max: 600; }
+.weight-bold { --weight-min: 700; --weight-max: 700; }
+.weight-extrabold { --weight-min: 800; --weight-max: 800; }
+.weight-black { --weight-min: 900; --weight-max: 900; }
+
+.to\:weight-hairline {--weight-max: 100; }
+.to\:weight-thin {--weight-max: 200; }
+.to\:weight-light {--weight-max: 300; }
+.to\:weight-normal {--weight-max: 400; }
+.to\:weight-medium {--weight-max: 500; }
+.to\:weight-semibold {--weight-max: 600; }
+.to\:weight-bold {--weight-max: 700; }
+.to\:weight-extrabold {--weight-max: 800; }
+.to\:weight-black {--weight-max: 900; }
+
+/* SHADOW */
+.shadow-mins-sm { --elevation-min-vwp: var(--sm-screen); }
+.shadow-mins-md { --elevation-min-vwp: var(--md-screen); }
+.shadow-mins-lg { --elevation-min-vwp: var(--lg-screen); }
+.shadow-mins-xl { --elevation-min-vwp: var(--xl-screen); }
+
+.shadow-maxs-sm { --elevation-max-vwp: var(--sm-screen); }
+.shadow-maxs-md { --elevation-max-vwp: var(--md-screen); }
+.shadow-maxs-lg { --elevation-max-vwp: var(--lg-screen); }
+.shadow-maxs-xl { --elevation-max-vwp: var(--xl-screen); }
+
+.shadow-invert { --elevation-direction : -1; }
+
+.shadow-0 { --elevation-min: calc(0 / 16); --elevation-max: calc(0 / 16); }
+.shadow-1 { --elevation-min: calc(1 / 16); --elevation-max: calc(1 / 16); }
+.shadow-2 { --elevation-min: calc(2 / 16); --elevation-max: calc(2 / 16); }
+.shadow-3 { --elevation-min: calc(3 / 16); --elevation-max: calc(3 / 16); }
+.shadow-4 { --elevation-min: calc(4 / 16); --elevation-max: calc(4 / 16); }
+.shadow-5 { --elevation-min: calc(5 / 16); --elevation-max: calc(5 / 16); }
+.shadow-6 { --elevation-min: calc(6 / 16); --elevation-max: calc(6 / 16); }
+.shadow-7 { --elevation-min: calc(7 / 16); --elevation-max: calc(7 / 16); }
+.shadow-8 { --elevation-min: calc(8 / 16); --elevation-max: calc(8 / 16); }
+.shadow-9 { --elevation-min: calc(9 / 16); --elevation-max: calc(9 / 16); }
+.shadow-10 { --elevation-min: calc(10 / 16); --elevation-max: calc(10 / 16); }
+.shadow-11 { --elevation-min: calc(11 / 16); --elevation-max: calc(11 / 16); }
+.shadow-12 { --elevation-min: calc(12 / 16); --elevation-max: calc(12 / 16); }
+.shadow-13 { --elevation-min: calc(13 / 16); --elevation-max: calc(13 / 16); }
+.shadow-14 { --elevation-min: calc(14 / 16); --elevation-max: calc(14 / 16); }
+.shadow-15 { --elevation-min: calc(15 / 16); --elevation-max: calc(15 / 16); }
+.shadow-16 { --elevation-min: calc(16 / 16); --elevation-max: calc(16 / 16); }
+.shadow-17 { --elevation-min: calc(17 / 16); --elevation-max: calc(17 / 16); }
+.shadow-18 { --elevation-min: calc(18 / 16); --elevation-max: calc(18 / 16); }
+.shadow-19 { --elevation-min: calc(19 / 16); --elevation-max: calc(19 / 16); }
+.shadow-20 { --elevation-min: calc(20 / 16); --elevation-max: calc(20 / 16); }
+.shadow-21 { --elevation-min: calc(21 / 16); --elevation-max: calc(21 / 16); }
+.shadow-22 { --elevation-min: calc(22 / 16); --elevation-max: calc(22 / 16); }
+.shadow-23 { --elevation-min: calc(23 / 16); --elevation-max: calc(23 / 16); }
+.shadow-24 { --elevation-min: calc(24 / 16); --elevation-max: calc(24 / 16); }
+
+.to\:shadow-0 {--elevation-max: calc(0 / 16); }
+.to\:shadow-1 {--elevation-max: calc(1 / 16); }
+.to\:shadow-2 {--elevation-max: calc(2 / 16); }
+.to\:shadow-3 {--elevation-max: calc(3 / 16); }
+.to\:shadow-4 {--elevation-max: calc(4 / 16); }
+.to\:shadow-5 {--elevation-max: calc(5 / 16); }
+.to\:shadow-6 {--elevation-max: calc(6 / 16); }
+.to\:shadow-7 {--elevation-max: calc(7 / 16); }
+.to\:shadow-8 {--elevation-max: calc(8 / 16); }
+.to\:shadow-9 {--elevation-max: calc(9 / 16); }
+.to\:shadow-10 {--elevation-max: calc(10 / 16); }
+.to\:shadow-11 {--elevation-max: calc(11 / 16); }
+.to\:shadow-12 {--elevation-max: calc(12 / 16); }
+.to\:shadow-13 {--elevation-max: calc(13 / 16); }
+.to\:shadow-14 {--elevation-max: calc(14 / 16); }
+.to\:shadow-15 {--elevation-max: calc(15 / 16); }
+.to\:shadow-16 {--elevation-max: calc(16 / 16); }
+.to\:shadow-17 {--elevation-max: calc(17 / 16); }
+.to\:shadow-18 {--elevation-max: calc(18 / 16); }
+.to\:shadow-19 {--elevation-max: calc(19 / 16); }
+.to\:shadow-20 {--elevation-max: calc(20 / 16); }
+.to\:shadow-21 {--elevation-max: calc(21 / 16); }
+.to\:shadow-22 {--elevation-max: calc(22 / 16); }
+.to\:shadow-23 {--elevation-max: calc(23 / 16); }
+.to\:shadow-24 {--elevation-max: calc(24 / 16); }
+
+/* Small (sm) */
+@media (min-width: 640px) {}
+
+/* Medium (md) */
+@media (min-width: 768px) {}
+
+/* Large (lg) */
+@media (min-width: 1024px) {}
+
+/* Extra Large (xl) */
+@media (min-width: 1280px) {}
