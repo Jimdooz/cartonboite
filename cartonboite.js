@@ -8,4 +8,4 @@ function updateWindowSize(){
 }
 
 updateWindowSize();
-window.addEventListener("resize", updateWindowSize);
+window.addEventListener("resize", () => { window.requestAnimationFrame(updateWindowSize) });
